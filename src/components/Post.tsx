@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 interface PostProps {
-  id: number; // Clave para solucionar el error del ID único en listas
+  id: number;
   avatar: string;
   name: string;
   time: string;
@@ -10,7 +10,6 @@ interface PostProps {
 }
 
 export function Post({ id, avatar, name, time, content, images }: PostProps) {
-  // Estados para manejar la interactividad del post
   const [likes, setLikes] = useState<number>(15);
   const [hasLiked, setHasLiked] = useState<boolean>(false);
   const [comments, setComments] = useState<string[]>([
@@ -20,7 +19,6 @@ export function Post({ id, avatar, name, time, content, images }: PostProps) {
   const [newComment, setNewComment] = useState<string>("");
   const [showComments, setShowComments] = useState<boolean>(false);
 
-  // Función para manejar el Like (incrementar/decrementar y cambiar color)
   const handleLike = () => {
     if (hasLiked) {
       setLikes(likes - 1);
@@ -31,7 +29,6 @@ export function Post({ id, avatar, name, time, content, images }: PostProps) {
     }
   };
 
-  // Función para agregar un nuevo comentario
   const handleAddComment = (e: React.FormEvent) => {
     e.preventDefault();
     if (newComment.trim() === "") return;
@@ -39,9 +36,8 @@ export function Post({ id, avatar, name, time, content, images }: PostProps) {
     setNewComment("");
   };
 
-  // Función de compartir
   const handleShare = () => {
-    alert(`¡Post #${id} compartido con éxito en tu muro!`);
+    alert(`¡Post #${id} compartido con éxito!`);
   };
 
   return (
@@ -52,7 +48,6 @@ export function Post({ id, avatar, name, time, content, images }: PostProps) {
       <hr className="w3-clear" />
       <p>{content}</p>
 
-      {/* Renderizado de imágenes si existen */}
       {images && images.length > 0 && (
         <div className="w3-row-padding" style={{ margin: '0 -16px' }}>
           {images.map((img, index) => (
@@ -63,13 +58,13 @@ export function Post({ id, avatar, name, time, content, images }: PostProps) {
         </div>
       )}
 
-      {/* Contador dinámico de Likes y Comentarios */}
+      {/* Botones Interactivos */}
       <button 
         type="button" 
         onClick={handleLike} 
         className={`w3-button w3-margin-bottom ${hasLiked ? 'w3-theme' : 'w3-theme-d1'}`}
       >
-        <i className="fa fa-thumbs-up"></i>   {likes} {hasLiked ? 'Liked' : 'Like'}
+        <i className="fa fa-thumbs-up"></i> &nbsp; {likes} {hasLiked ? 'Liked' : 'Like'}
       </button>
 
       <button 
@@ -77,7 +72,7 @@ export function Post({ id, avatar, name, time, content, images }: PostProps) {
         onClick={() => setShowComments(!showComments)} 
         className="w3-button w3-theme-d2 w3-margin-bottom"
       >
-        <i className="fa fa-comment"></i>   {comments.length} Comentarios
+        <i className="fa fa-comment"></i> &nbsp; {comments.length} Comentarios
       </button>
 
       <button 
@@ -85,10 +80,10 @@ export function Post({ id, avatar, name, time, content, images }: PostProps) {
         onClick={handleShare} 
         className="w3-button w3-theme-d1 w3-margin-bottom w3-right"
       >
-        <i className="fa fa-share"></i>   Compartir
+        <i className="fa fa-share"></i> &nbsp; Compartir
       </button>
 
-      {/* Sección desplegable de comentarios */}
+      {/* Caja de comentarios */}
       {showComments && (
         <div className="w3-container w3-light-grey w3-padding w3-round w3-margin-bottom">
           <form onSubmit={handleAddComment} style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
