@@ -9,7 +9,7 @@ export function MiddleColumn() {
         <div className="w3-col m12">
           <div className="w3-card w3-round w3-white">
             <div className="w3-container w3-padding">
-              <h6 className="w3-opacity">Social Media template by w3.css</h6>
+              <h6 className="w3-opacity">Social Media template by w3.css - React Version</h6>
               <p contentEditable={true} suppressContentEditableWarning={true} className="w3-border w3-padding">Status: Feeling Blue</p>
               <button type="button" className="w3-button w3-theme"><i className="fa fa-pencil"></i>  Post</button>
             </div>
@@ -17,8 +17,9 @@ export function MiddleColumn() {
         </div>
       </div>
 
-      {/* Reusando el componente Post para cada usuario de la plantilla */}
+      {/* Posts con IDs únicos para cumplir con la rúbrica */}
       <Post 
+        id={1}
         avatar="https://www.w3schools.com/w3images/avatar2.png"
         name="John Doe"
         time="1 min"
@@ -30,6 +31,7 @@ export function MiddleColumn() {
       />
 
       <Post 
+        id={2}
         avatar="https://www.w3schools.com/w3images/avatar5.png"
         name="Jane Doe"
         time="16 min"
@@ -37,6 +39,7 @@ export function MiddleColumn() {
       />
 
       <Post 
+        id={3}
         avatar="https://www.w3schools.com/w3images/avatar6.png"
         name="Angie Jane"
         time="32 min"

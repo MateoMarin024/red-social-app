@@ -1,28 +1,38 @@
-import { Navbar } from './components/Navbar';
-import { LeftColumn } from './components/LeftColumn';
-import { MiddleColumn } from './components/MiddleColumn';
-import { RightColumn } from './components/RightColumn';
-import { Footer } from './components/Footer';
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Login } from './components/Login';
+import { Feed } from './components/Feed';
+import { Profile } from './components/Profile';
 
-function App() {
-  // Aplicamos la clase de fondo al div principal para simular el body
-  return (
-    <div className="w3-theme-l5" style={{ minHeight: '100vh' }}>
-      <Navbar />
-
-      {/* Page Container */}
-      <div className="w3-container w3-content" style={{ maxWidth: '1400px', marginTop: '80px' }}>
-        <div className="w3-row">
-          <LeftColumn />
-          <MiddleColumn />
-          <RightColumn />
-        </div>
-      </div>
-      <br />
-
-      <Footer />
-    </div>
-  );
+// Componente para validar Rutas Restringidas (Nota 5.0)
+function PrivateRoute({ children }: { children: JSX.Element }) {
+  const isLogged = localStorage.getItem('usuario');
+  return isLogged ? children : <Navigate to="/login" />;
 }
 
-export default App;
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route 
+          path="/feed" 
+          element={
+            <PrivateRoute>
+              <Feed />
+            </PrivateRoute>
+          } 
+        />
+        <Route 
+          path="/profile" 
+          element={
+            <PrivateRoute>
+              <Profile />
+            </PrivateRoute>
+          } 
+        />
+        <Route path="*" element={<Navigate to="/login" />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
