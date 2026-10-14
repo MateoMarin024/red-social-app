@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export function Login() {
   const [email, setEmail] = useState('');
@@ -69,10 +69,16 @@ export function Login() {
             />
           </div>
 
-          <button type="submit" style={{ width: '100%', backgroundColor: '#1877f2', color: 'white', border: 'none', padding: '12px', borderRadius: '6px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }}>
+          <button type="submit" style={{ width: '100%', backgroundColor: '#1877f2', color: 'white', border: 'none', padding: '12px', borderRadius: '6px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', marginBottom: '15px' }}>
             Iniciar Sesión
           </button>
         </form>
+
+        <div style={{ textAlign: 'center', borderTop: '1px solid #dadde1', paddingTop: '15px' }}>
+          <p style={{ fontSize: '14px', color: '#606770', margin: 0 }}>
+            ¿No tienes cuenta? <Link to="/register" style={{ color: '#42b72a', textDecoration: 'none', fontWeight: 'bold' }}>Crear cuenta nueva</Link>
+          </p>
+        </div>
       </div>
     </div>
   );
