@@ -41,7 +41,7 @@ export function Feed() {
   
   const [newPostText, setNewPostText] = useState('');
 
-  // Crear nueva publicación con ID único
+  // Crear nueva publicación
   const handleCreatePost = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newPostText.trim()) return;
@@ -65,7 +65,7 @@ export function Feed() {
     setNewPostText('');
   };
 
-  // Manejar Likes
+  // Manejar Likes con estilo azul estilo Facebook
   const handleLike = (id: number) => {
     setPosts(posts.map(post => {
       if (post.id === id) {
@@ -80,15 +80,33 @@ export function Feed() {
     }));
   };
 
-  // Manejar Compartir (con alerta y contador actualizado)
-  const handleShare = (id: number) => {
+  // Manejar Compartir: Incrementa contador, emite alerta Y crea un post nuevo en el inicio reflejando lo compartido
+  const handleShare = (postToShare: any) => {
     setPosts(posts.map(post => {
-      if (post.id === id) {
+      if (post.id === postToShare.id) {
         return { ...post, shares: post.shares + 1 };
       }
       return post;
     }));
-    alert('¡Publicación compartida con éxito!');
+
+    // Crear la nueva publicación en el inicio simulando el compartir
+    const sharedPost = {
+      id: Date.now(),
+      author: 'Mateo Marín (Compartido)',
+      avatar: 'https://www.w3schools.com/w3images/avatar2.png',
+      time: 'Justo ahora',
+      content: `Publicación compartida de ${postToShare.author}: "${postToShare.content}"`,
+      image: postToShare.image || '',
+      likes: 0,
+      liked: false,
+      shares: 0,
+      showComments: false,
+      commentText: '',
+      commentsList: []
+    };
+
+    setPosts([sharedPost, ...posts]);
+    alert('¡Publicación compartida con éxito y añadida a tu inicio!');
   };
 
   // Alternar Comentarios
@@ -143,10 +161,7 @@ export function Feed() {
             <i className="fa fa-globe"></i>
           </a>
           <a onClick={() => navigate('/profile')} className="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Perfil" style={{ cursor: 'pointer' }}>
-            <i className="fa fa-user"></i>
-          </a>
-          <a onClick={() => alert('Bandeja de mensajes')} className="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Mensajes" style={{ cursor: 'pointer' }}>
-            <i className="fa fa-envelope"></i>
+            <i className="fa fa-user"></i> Ver Perfil
           </a>
           <a onClick={() => { localStorage.removeItem('usuario'); navigate('/login'); }} className="w3-bar-item w3-button w3-hide-small w3-right w3-padding-large w3-hover-red" title="Salir" style={{ cursor: 'pointer' }}>
             <i className="fa fa-sign-out"></i> Salir
@@ -158,17 +173,20 @@ export function Feed() {
       <div className="w3-container" style={{ maxWidth: '1400px', marginTop: '80px', marginLeft: 'auto', marginRight: 'auto' }}>
         <div className="w3-row">
           
-          {/* Columna Izquierda: Perfil */}
+          {/* Columna Izquierda: Perfil Resumen */}
           <div className="w3-col m3">
             <div className="w3-card w3-round w3-white">
               <div className="w3-container">
-                <h4 className="w3-center">Mi Perfil</h4>
+                <h4 className="w3-center">Mateo Marín</h4>
                 <p className="w3-center">
                   <img src="https://www.w3schools.com/w3images/avatar2.png" className="w3-circle" style={{ height: '106px', width: '106px' }} alt="Avatar" />
                 </p>
                 <hr />
-                <p><i className="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i> Frontend Dev, Zolvyx</p>
+                <p><i className="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i> Frontend Developer & Estudiante</p>
                 <p><i className="fa fa-home fa-fw w3-margin-right w3-text-theme"></i> Medellín, Colombia</p>
+                <button onClick={() => navigate('/profile')} style={{ width: '100%', backgroundColor: '#e4e6eb', border: 'none', padding: '8px', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer', marginBottom: '10px' }}>
+                  Editar Perfil
+                </button>
               </div>
             </div>
             <br />
@@ -228,31 +246,37 @@ export function Feed() {
                   </div>
                 </div>
 
-                {/* Botones de acción estilo Facebook */}
+                {/* Botones de acción estilo Facebook con Me gusta azul dinámico */}
                 <div className="w3-row" style={{ marginTop: '8px', display: 'flex', justifyContent: 'space-between' }}>
                   <button 
                     type="button" 
                     onClick={() => handleLike(post.id)}
                     className="w3-button w3-white w3-hover-light-grey" 
-                    style={{ flex: 1, color: post.liked ? '#2196F3' : '#555', fontWeight: 'bold' }}
+                    style={{ 
+                      flex: 1, 
+                      color: post.liked ? '#1877f2' : '#65676b', 
+                      fontWeight: 'bold',
+                      backgroundColor: post.liked ? '#e7f3ff' : 'transparent',
+                      borderRadius: '4px'
+                    }}
                   >
-                    <i className="fa fa-thumbs-up"></i> Me gusta
+                    <i className="fa fa-thumbs-up" style={{ color: post.liked ? '#1877f2' : 'inherit' }}></i> {post.liked ? 'Me gusta' : 'Me gusta'}
                   </button>
                   
                   <button 
                     type="button" 
                     onClick={() => toggleComments(post.id)}
                     className="w3-button w3-white w3-hover-light-grey" 
-                    style={{ flex: 1, color: '#555', fontWeight: 'bold' }}
+                    style={{ flex: 1, color: '#65676b', fontWeight: 'bold' }}
                   >
                     <i className="fa fa-comment"></i> Comentar
                   </button>
 
                   <button 
                     type="button" 
-                    onClick={() => handleShare(post.id)}
+                    onClick={() => handleShare(post)}
                     className="w3-button w3-white w3-hover-light-grey" 
-                    style={{ flex: 1, color: '#555', fontWeight: 'bold' }}
+                    style={{ flex: 1, color: '#65676b', fontWeight: 'bold' }}
                   >
                     <i className="fa fa-share"></i> Compartir
                   </button>
@@ -294,8 +318,8 @@ export function Feed() {
               <div className="w3-container">
                 <p><strong>Próximos Eventos:</strong></p>
                 <img src="https://www.w3schools.com/w3images/forest.jpg" alt="Forest" style={{ width: '100%' }} />
-                <p><strong>Entrega Proyecto Final</strong></p>
-                <p>Miércoles, 7:00 PM</p>
+                <p><strong>Entrega Proyecto Integrador</strong></p>
+                <p>¡Nota 5.0 Asegurada! 🚀</p>
               </div>
             </div>
             <br />
